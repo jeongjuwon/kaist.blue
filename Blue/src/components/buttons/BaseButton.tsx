@@ -8,11 +8,21 @@ type Props = {
   style?: ViewStyle | ViewStyle[];
   textStyle?: TextStyle;
   onPress?: (event: GestureResponderEvent) => void;
+  disabled?: boolean;
 };
 
-const BaseButton: React.FC<Props> = ({title, style, textStyle, onPress}) => {
+const BaseButton: React.FC<Props> = ({
+  title,
+  style,
+  textStyle,
+  onPress,
+  disabled,
+}) => {
   return (
-    <Pressable style={[styles.button, style]} onPress={onPress}>
+    <Pressable
+      style={[styles.button, style]}
+      onPress={onPress}
+      disabled={disabled}>
       <PublicText style={textStyle}>{title}</PublicText>
     </Pressable>
   );

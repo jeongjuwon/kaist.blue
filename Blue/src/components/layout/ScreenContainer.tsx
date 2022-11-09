@@ -15,6 +15,7 @@ const ScreenContainer: React.FC<Props> = ({children, style}) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor: '#fff',
   },
 });
 

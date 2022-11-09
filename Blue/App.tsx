@@ -1,10 +1,15 @@
-import React, { PropsWithChildren, type } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import SignIn from './src/screens/auth/SignIn';
+import RootStackNavigator from './src/screens/RootStackNavigator';
 
 const App = () => {
-  return <SignIn />;
+  return (
+    <NavigationContainer>
+      <RootStackNavigator />
+    </NavigationContainer>
+  );
 };
 
 const styles = StyleSheet.create({

@@ -7,15 +7,22 @@ type Props = {
   title: string;
   style?: ViewStyle;
   onPress: (event: GestureResponderEvent) => void;
+  disabled?: boolean;
 };
 
-const LightBlueButton: React.FC<Props> = ({title, style, onPress}) => {
+const LightBlueButton: React.FC<Props> = ({
+  title,
+  style,
+  onPress,
+  disabled,
+}) => {
   return (
     <BaseButton
       title={title}
       style={[styles.button, style]}
       textStyle={styles.text}
       onPress={onPress}
+      disabled={disabled}
     />
   );
 };
