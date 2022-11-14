@@ -11,7 +11,7 @@ import CustomTextInput from './components/CustomTextInput';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 const SignInScreen: React.FC<Props> = ({navigation}) => {
-  const [email, setEmail] = useState('');
+  const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   // const navigation = useNavigation();
 
@@ -31,11 +31,11 @@ const SignInScreen: React.FC<Props> = ({navigation}) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <Logo />
         <CustomTextInput
-          placeholder="이메일을 입력하세요."
-          value={email}
+          placeholder="아이디를 입력하세요."
+          value={id}
           style={styles.idInput}
           onChangeText={text => {
-            setEmail(text);
+            setId(text);
           }}
         />
         <CustomTextInput

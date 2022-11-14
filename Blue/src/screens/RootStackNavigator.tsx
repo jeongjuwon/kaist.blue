@@ -27,7 +27,7 @@ const RootStackNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="ClubList">
+      initialRouteName="SignIn">
       <Stack.Screen name="SignIn" component={SignInScreen} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
       <Stack.Screen name="ClubList" component={ClubListScreen} />
