@@ -88,7 +88,7 @@
 						}
 					}
 				},
-				"url": "http://112.166.68.194:8000/auth/authenticate"
+				"url": "http://localhost:8091/auth/authenticate"
 			},
 			"response": []
 		},
@@ -147,7 +147,7 @@
 						}
 					}
 				},
-				"url": "http://112.166.68.194:8000/community/list"
+				"url": "http://localhost:8091/community/list"
 			},
 			"response": []
 		},
@@ -205,7 +205,7 @@
 						}
 					}
 				},
-				"url": "http://112.166.68.194:8000/community/list/user"
+				"url": "http://localhost:8091/community/list/user"
 			},
 			"response": []
 		},
