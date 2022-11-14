@@ -79,9 +79,10 @@ const ClubListScreen: React.FC<Props> = () => {
   return (
     <ScreenContainer>
       <ScrollView>
-        {clubList.map(row => {
+        {clubList.map((row, index) => {
           return (
             <ClubListItem
+              key={index}
               title={row.title}
               image={row.image}
               onPress={onPressClub}
