@@ -49,7 +49,7 @@ code APIServer
 
 ## 디비 경로 입력
 
-/APIServer/src/main/resources/application.properties 해당 파일을 오픈한다.
+/APIServer/src/main/resources/application.properties 파일 수정
 
 ```
 spring.datasource.url=jdbc:mysql://디비호스트:디피포트/디비명?&allowPublicKeyRetrieval=true
