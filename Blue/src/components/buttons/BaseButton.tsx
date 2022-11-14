@@ -5,7 +5,7 @@ import PublicText from '../common/PublicText';
 
 type Props = {
   title: string;
-  style?: ViewStyle | ViewStyle[];
+  style?: ViewStyle;
   textStyle?: TextStyle;
   onPress?: (event: GestureResponderEvent) => void;
   disabled?: boolean;

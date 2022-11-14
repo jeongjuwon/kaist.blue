@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { SafeAreaView, StyleSheet, ViewStyle } from 'react-native';
 
 type Props = {
-  children: ReactNode;
+  children?: ReactNode;
   style?: ViewStyle;
 };
 

@@ -58,7 +58,7 @@ const data: Data[] = [
 ];
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ClubList'>;
-const ClubListScreen: React.FC<Props> = () => {
+const ClubListScreen: React.FC<Props> = ({navigation}) => {
   const [clubList, setClubList] = useState<Data[]>([]);
 
   useEffect(() => {
@@ -73,7 +73,9 @@ const ClubListScreen: React.FC<Props> = () => {
     // 만약 가입되어있으면
     // navigation.navigate('ClubHome');
     // 아니라면
-    // navigation.navigate('CreateProfile');
+    navigation.navigate('CreateProfile', {
+      clubId: 1,
+    });
   }, []);
 
   return (
