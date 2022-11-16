@@ -4,79 +4,97 @@ import { useState } from 'react';
 import { useCallback } from 'react';
 import { useEffect } from 'react';
 import { ScrollView } from 'react-native';
+import { useRecoilValue } from 'recoil';
 
+import userTokenState from '../../atoms/userTokenState';
 import ScreenContainer from '../../components/layout/ScreenContainer';
 import { RootStackParamList } from '../RootStackNavigator';
 import ClubListItem from './components/ClubListItem';
 
 type Data = {
+  id: number;
   title: string;
+  summary: string;
+  status?: string;
+  createdAt: Date;
   image: string;
+  imageStr?: string;
+  type: string;
 };
 
-const data: Data[] = [
-  {
-    title: '커뮤니티',
-    image: '',
-  },
-  {
-    title: '커뮤니티',
-    image: '',
-  },
-  {
-    title: '커뮤니티',
-    image: '',
-  },
-  {
-    title: '커뮤니티',
-    image: '',
-  },
-  {
-    title: '커뮤니티',
-    image: '',
-  },
-  {
-    title: '커뮤니티',
-    image: '',
-  },
-  {
-    title: '커뮤니티',
-    image: '',
-  },
-  {
-    title: '커뮤니티',
-    image: '',
-  },
-  {
-    title: '커뮤니티',
-    image: '',
-  },
-  {
-    title: '커뮤니티',
-    image: '',
-  },
-];
+type JoinedClubData = {
+  summary: string;
+  sortNo: number;
+  image: string;
+  communityId: number;
+  title: string;
+  type: string;
+  userId?: number;
+};
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ClubList'>;
 const ClubListScreen: React.FC<Props> = ({navigation}) => {
   const [clubList, setClubList] = useState<Data[]>([]);
+  const userTokenStateValue = useRecoilValue(userTokenState);
 
   useEffect(() => {
-    // todo: 네트워킹
-    // data: 응답
-    return setClubList(data);
+    async function init() {
+      try {
+        const response = await fetch('http://localhost:8091/community/list', {
+          method: 'GET',
+          headers: {
+            Accepts: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+        const responseData = await response.json();
+        setClubList(responseData.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    init();
   }, []);
 
-  const onPressClub = useCallback(() => {
-    // todo: 네트워킹
-    // 해당 클럽에 가입되어있는지 여부를 여기서 체크
-    // 만약 가입되어있으면
-    // navigation.navigate('ClubHome');
-    // 아니라면
-    navigation.navigate('CreateProfile', {
-      clubId: 1,
-    });
-  }, []);
+  const onPressClub = useCallback(
+    (clubId: number) => async () => {
+      try {
+        const response = await fetch(
+          'http://localhost:8091/community/list/user',
+          {
+            method: 'POST',
+            headers: {
+              Accepts: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${userTokenStateValue}`,
+            },
+          },
+        );
+        const responseData = await response.json();
+
+        const club = responseData.data.find((row: JoinedClubData) => {
+          return !!row.userId && row.communityId === clubId;
+        });
+        console.log('club', club);
+        // 해당 클럽에 가입되어있는지 여부를 여기서 체크
+        if (club) {
+          // 만약 가입되어있으면
+          navigation.navigate('ClubHome', {
+            clubId,
+          });
+        } else {
+          // 아니라면
+          navigation.navigate('CreateProfile', {
+            clubId,
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [],
+  );
 
   return (
     <ScreenContainer>
@@ -86,8 +104,8 @@ const ClubListScreen: React.FC<Props> = ({navigation}) => {
             <ClubListItem
               key={index}
               title={row.title}
-              image={row.image}
-              onPress={onPressClub}
+              image={`${row.type}${row.image}`}
+              onPress={onPressClub(row.id)}
             />
           );
         })}

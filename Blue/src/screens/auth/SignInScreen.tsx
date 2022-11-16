@@ -1,7 +1,10 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useRecoilState } from 'recoil';
 
+import userTokenState from '../../atoms/userTokenState';
 import LightBlueButton from '../../components/buttons/LightBlueButton';
 import PublicText from '../../components/common/PublicText';
 import Logo from '../../components/layout/Logo';
@@ -13,12 +16,32 @@ type Props = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 const SignInScreen: React.FC<Props> = ({navigation}) => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [userTokenStateValue, setUserTokenState] =
+    useRecoilState(userTokenState);
   // const navigation = useNavigation();
 
-  const onSignIn = useCallback(() => {
-    // todo: 네트워킹
-    navigation.navigate('ClubList');
-  }, [navigation]);
+  const onSignIn = useCallback(async () => {
+    try {
+      const response = await fetch('http://localhost:8091/auth/authenticate', {
+        method: 'POST',
+        headers: {
+          //   Accepts: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: id,
+          upassword: password,
+        }),
+      });
+      const token = await response.text();
+      await AsyncStorage.setItem('token', token);
+      setUserTokenState(token);
+    } catch (error) {
+      console.error(error);
+    }
+
+    // navigation.navigate('ClubList');
+  }, [navigation, id, password]);
 
   const onSignUp = useCallback(() => {
     navigation.navigate('SignUp');

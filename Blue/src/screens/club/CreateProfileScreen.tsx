@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useState } from 'react';
 import { GestureResponderEvent, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRecoilValue } from 'recoil';
 
-import CancelButton from '../../components/buttons/CancelButton';
-import GrayButton from '../../components/buttons/GrayButton';
+import userTokenState from '../../atoms/userTokenState';
 import LightBlueButton from '../../components/buttons/LightBlueButton';
 import ScreenContainer from '../../components/layout/ScreenContainer';
 import CustomTextInput from '../auth/components/CustomTextInput';
@@ -12,18 +12,46 @@ import ProfileImage from './components/ProfileImage';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'CreateProfile'>;
 const CreateProfileScreen: React.FC<Props> = ({navigation, route}) => {
+  const {clubId} = route.params;
   const [nickName, setNickName] = useState('');
+  const userTokenStateValue = useRecoilValue(userTokenState);
 
   const onChangeNickName = useCallback((text: string) => {
     setNickName(text);
   }, []);
 
-  const onSave = useCallback((event: GestureResponderEvent) => {
-    // todo: networking
-    navigation.navigate('ClubHome', {
-      clubId: 1,
-    });
-  }, []);
+  const onSave = useCallback(
+    async (event: GestureResponderEvent) => {
+      // todo: networking
+
+      try {
+        const response = await fetch(
+          'http://localhost:8091/community/user/add',
+          {
+            method: 'POST',
+            headers: {
+              Accepts: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${userTokenStateValue}`,
+            },
+            body: JSON.stringify({
+              communityId: clubId,
+              nickName: nickName,
+              sortNo: '0',
+            }),
+          },
+        );
+        const responseData = await response.json();
+        // console.log('responseData', responseData);
+        navigation.navigate('ClubHome', {
+          clubId,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [clubId, nickName],
+  );
 
   const onCancel = useCallback((event: GestureResponderEvent) => {
     // todo: networking
@@ -48,10 +76,10 @@ const CreateProfileScreen: React.FC<Props> = ({navigation, route}) => {
           value={nickName}
           onChangeText={onChangeNickName}
         />
-        <LightBlueButton title="클럽 정보수정" onPress={onSave} />
+        {/* <LightBlueButton title="클럽 정보수정" onPress={onSave} /> */}
         <LightBlueButton title="클럽 가입하기" onPress={onSave} />
-        <CancelButton onPress={onCancel} />
-        <GrayButton title="클럽 탈퇴하기" onPress={onDeleteProfile} />
+        {/* <CancelButton onPress={onCancel} /> */}
+        {/* <GrayButton title="클럽 탈퇴하기" onPress={onDeleteProfile} /> */}
       </KeyboardAvoidingView>
     </ScreenContainer>
   );

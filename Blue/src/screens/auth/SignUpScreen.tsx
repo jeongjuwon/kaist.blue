@@ -18,11 +18,11 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
   const [passwordRe, setPasswordRe] = useState('');
 
   const onChangeId = useCallback((text: string) => {
-    setEmail(text);
+    setId(text);
   }, []);
 
   const onChangeName = useCallback((text: string) => {
-    setEmail(text);
+    setName(text);
   }, []);
 
   const onChangeEmail = useCallback((text: string) => {
@@ -46,10 +46,30 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
     navigation.goBack();
   }, [navigation]);
 
-  const onSignUp = useCallback(() => {
+  const onSignUp = useCallback(async () => {
     // todo: 네트워킹
-    navigation.goBack();
-  }, [navigation]);
+    try {
+      const response = await fetch('http://localhost:8091/api/signup', {
+        method: 'POST',
+        headers: {
+          Accepts: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: id,
+          userName: name,
+          upassword: password,
+          email: email,
+        }),
+      });
+      const responseData = await response.json();
+      console.log('responseData', responseData);
+
+      navigation.goBack();
+    } catch (e) {
+      console.log(e);
+    }
+  }, [navigation, id, name, password, email]);
 
   return (
     <ScreenContainer style={styles.screenContainer}>
