@@ -10,6 +10,7 @@ type Props = {
   placeholder?: string;
   onChangeText?: (text: string) => void;
   style?: ViewStyle;
+  multiline?: boolean;
   secureTextEntry?: boolean;
 };
 
@@ -19,6 +20,7 @@ const CustomTextInput: React.FC<Props> = ({
   placeholder,
   style,
   secureTextEntry = false,
+  multiline,
 }) => {
   return (
     <TextInput
@@ -27,6 +29,7 @@ const CustomTextInput: React.FC<Props> = ({
       onChangeText={onChangeText}
       style={[styles.textInput, style]}
       secureTextEntry={secureTextEntry}
+      multiline={multiline}
     />
   );
 };
