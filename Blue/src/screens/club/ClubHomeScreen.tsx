@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useRecoilValue } from 'recoil';
 
 import articlesState from '../../atoms/articlesState';
@@ -43,6 +43,14 @@ const ClubHomeScreen: React.FC<Props> = ({navigation, route}) => {
             </TouchableOpacity>
           );
         }}
+        ListEmptyComponent={
+          <View style={styles.emptyListContainer}>
+            <PublicText>등록된 글이 없습니다.</PublicText>
+          </View>
+        }
+        contentContainerStyle={{
+          flex: 1,
+        }}
         style={styles.container}
       />
       <FloatingActionButtton clubId={clubId} />
@@ -53,6 +61,11 @@ const ClubHomeScreen: React.FC<Props> = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+  },
+  emptyListContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

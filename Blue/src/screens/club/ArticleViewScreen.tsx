@@ -2,7 +2,10 @@ import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
+import { useRecoilRefresher_UNSTABLE, useRecoilValue } from 'recoil';
 
+import articlesState from '../../atoms/articlesState';
+import userTokenState from '../../atoms/userTokenState';
 import ScreenContainer from '../../components/layout/ScreenContainer';
 import { RootStackParamList } from '../RootStackNavigator';
 import CommentListItem from './components/CommentListItem';
@@ -13,7 +16,7 @@ import WriteCommentInput from './components/WriteCommentInput';
 type Props = NativeStackScreenProps<RootStackParamList, 'ArticleView'>;
 const ArticleViewScreen: React.FC<Props> = ({navigation, route}) => {
   const {
-    boardId,
+    boardId: articleId,
     communityId: clubId,
     content,
     createdAt,
@@ -22,6 +25,8 @@ const ArticleViewScreen: React.FC<Props> = ({navigation, route}) => {
   } = route.params;
   const [article, setArticle] = useState(null);
   const [comments, setComments] = useState([]);
+  const userTokenValue = useRecoilValue(userTokenState);
+  const refreshArticles = useRecoilRefresher_UNSTABLE(articlesState(clubId));
 
   useFocusEffect(
     useCallback(() => {
@@ -46,13 +51,50 @@ const ArticleViewScreen: React.FC<Props> = ({navigation, route}) => {
     initComment();
   }, [initComment]);
 
-  const onSave = useCallback(() => {
-    initComment();
-  }, [initComment]);
+  const onSave = useCallback(() => {}, []);
 
-  const onDelete = useCallback(() => {
-    initComment();
-  }, [initComment]);
+  const onCommentSave = useCallback(
+    async (content: string) => {
+      const response = await fetch('http://localhost:8091/board/comment/save', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userTokenValue}`,
+        },
+        body: JSON.stringify({
+          communityId: clubId,
+          boardId: articleId,
+          content,
+        }),
+      });
+      const responseData = await response.json();
+      console.log('responseData', responseData);
+    },
+    [userTokenValue],
+  );
+
+  const onDelete = useCallback(async () => {
+    try {
+      const response = await fetch('http://localhost:8091/board/delete', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userTokenValue}`,
+        },
+        body: JSON.stringify({
+          id: articleId,
+        }),
+      });
+      const responseData = await response.json();
+      console.log('responseData', responseData);
+      refreshArticles();
+      navigation.goBack();
+    } catch (e) {
+      console.log(e);
+    }
+  }, [articleId]);
 
   return (
     <>
@@ -67,7 +109,7 @@ const ArticleViewScreen: React.FC<Props> = ({navigation, route}) => {
           ListHeaderComponent={
             <ViewArticle
               article={{
-                boardId,
+                boardId: articleId,
                 communityId: clubId,
                 content,
                 createdAt,
@@ -85,7 +127,11 @@ const ArticleViewScreen: React.FC<Props> = ({navigation, route}) => {
             bottom: 20,
           }}
         />
-        <WriteCommentInput articleId={0} onSave={onSave} onDelete={onDelete} />
+        <WriteCommentInput
+          articleId={0}
+          onCommentSave={onCommentSave}
+          onDelete={onDelete}
+        />
       </ScreenContainer>
     </>
   );

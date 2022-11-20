@@ -13,7 +13,7 @@ type Props = {
 };
 
 // 네비게이션 설치과정에서 설치된 패키지
-const ViewArticleHeader: React.FC<Props> = ({clubId, articleId}) => {
+const ViewArticleHeader: React.FC<Props> = ({clubId, articleId, onDelete}) => {
   const inset = useSafeAreaInsets();
   const navigation = useNavigation();
 
@@ -21,20 +21,13 @@ const ViewArticleHeader: React.FC<Props> = ({clubId, articleId}) => {
     navigation.goBack();
   }, [navigation]);
 
-  const onEdit = useCallback(() => {
-    navigation.navigate('ArticleWrite', {
-      clubId,
-      articleId,
-    });
-  }, [navigation, clubId, articleId]);
-
   return (
     <View style={[styles.container, {paddingTop: inset.top}]}>
       <TouchableOpacity onPress={onBack} style={styles.backBtn}>
         <PublicText style={styles.backBtnTitle}>뒤로</PublicText>
       </TouchableOpacity>
-      <TouchableOpacity onPress={onEdit} style={styles.backBtn}>
-        <PublicText style={styles.backBtnTitle}>글수정</PublicText>
+      <TouchableOpacity onPress={onDelete} style={styles.backBtn}>
+        <PublicText style={styles.backBtnTitle}>글삭제</PublicText>
       </TouchableOpacity>
     </View>
   );

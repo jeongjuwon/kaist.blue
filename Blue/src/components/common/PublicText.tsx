@@ -12,8 +12,8 @@ const PublicText: React.FC<Props> = ({style, children}) => {
 
 const styles = StyleSheet.create({
   text: {
-    // fontFamily: ''
-    fontSize: 15,
+    fontFamily: 'Nanum GoDigANiGoGoDing',
+    fontSize: 20,
   },
 });
 

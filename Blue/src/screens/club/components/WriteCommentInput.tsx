@@ -6,29 +6,18 @@ import CustomTextInput from '../../auth/components/CustomTextInput';
 
 type Props = {
   articleId: number;
-  onSave: () => void;
+  onCommentSave: (content: string) => void;
   onDelete: () => void;
 };
 
-const WriteCommentInput: React.FC<Props> = ({articleId, onSave, onDelete}) => {
+const WriteCommentInput: React.FC<Props> = ({
+  articleId,
+  onCommentSave,
+  onDelete,
+}) => {
   const [content, setContent] = useState('');
 
   useEffect(() => {}, []);
-
-  const onPress = useCallback(async () => {
-    try {
-      if (onSave) {
-        onSave();
-      }
-    } catch (e) {}
-  }, [articleId, content, onSave]);
-
-  const onDeleteComment = useCallback(async () => {
-    try {
-    } catch (e) {
-      console.log(e);
-    }
-  }, []);
 
   const isDisabled = useMemo(() => content.length < 10, [content.length]);
 
@@ -42,7 +31,10 @@ const WriteCommentInput: React.FC<Props> = ({articleId, onSave, onDelete}) => {
       />
       <TouchableOpacity
         style={styles.btn}
-        onPress={onPress}
+        onPress={() => {
+          onCommentSave(content);
+          setContent('');
+        }}
         disabled={isDisabled}>
         <PublicText
           style={[

@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
-import { useRecoilState } from 'recoil';
+import { useRecoilRefresher_UNSTABLE, useRecoilState } from 'recoil';
 
 import articlesState from '../../atoms/articlesState';
 import userTokenState from '../../atoms/userTokenState';
@@ -15,6 +15,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'ArticleWrite'>;
 const ArticleWriteScreen: React.FC<Props> = ({navigation, route}) => {
   const {clubId, articleId} = route.params;
   const [tokenStateValue, setTokenState] = useRecoilState(userTokenState);
+  const refreshArticles = useRecoilRefresher_UNSTABLE(articlesState(clubId));
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -41,7 +42,7 @@ const ArticleWriteScreen: React.FC<Props> = ({navigation, route}) => {
       });
       const responseData = await response.json();
       console.log('responseData', responseData);
-      articlesState(clubId);
+      refreshArticles();
       navigation.goBack();
     } catch (e) {
       console.log(e);
