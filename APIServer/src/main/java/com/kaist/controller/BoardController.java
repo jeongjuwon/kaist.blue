@@ -87,8 +87,25 @@ public class BoardController {
 		
 		return new ResponseEntity<>(message, headers, HttpStatus.OK);
 	}
-	
-	
+
+	@PostMapping("/comment/list")
+	public ResponseEntity<Message> commentList(@RequestBody BoardComment param, Authentication auth){
+
+		List<HashMap> result = boardService.list(param);
+
+		Message message = new Message();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+		message.setStatus(StatusEnum.OK);
+
+		message.setMessage(null == result ? "error" : "ok");
+		message.setData(null == result ? new ArrayList():result);
+
+
+		return new ResponseEntity<>(message, headers, HttpStatus.OK);
+	}
+
+
 	@PostMapping("/comment/save")
 	public ResponseEntity<Message> saveComment(@RequestBody BoardComment param, Authentication auth){
 		

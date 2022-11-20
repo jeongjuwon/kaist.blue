@@ -24,32 +24,36 @@
 	</select>
 	
 	<select id="findByCommunityBoard" resultType="HashMap">
-	SELECT 
+	SELECT
 		b.id AS boardId
-		,b.communityId
-		,b.content
-		,b.title
-		,b.createdAt
-		,cu.nickName
-		,cu.userId
-		FROM Board b 
-		LEFT JOIN CommunityUser cu 
-		ON b.userId = cu.userId 
+		 ,b.communityId
+		 ,b.content
+		 ,b.title
+		 ,b.createdAt
+		 ,cu.nickName
+		 ,cu.userId
+	FROM Board b
+			 LEFT JOIN CommunityUser cu
+					   ON b.userId = cu.userId
+					  and b.communityId = cu.communityId
 	where b.communityId = #{communityId}
+    order by b.createdAt DESC
 	</select>
 	
 	<select id="findByBoardComment"  resultType="HashMap">
-	SELECT 
-		bc.id 
-		,bc.boardId
-		,bc.communityId 
-		,bc.content 
-		,bc.createdAt 
-		,cu.nickName 
-		,cu.userId 
-		FROM BoardComment bc 
-		LEFT JOIN CommunityUser cu
-		ON bc.userId = cu.userId
-		WHERE bc.boardId = #{boardId}
+		SELECT
+			bc.id
+			 ,bc.boardId
+			 ,bc.communityId
+			 ,bc.content
+			 ,bc.createdAt
+			 ,cu.nickName
+			 ,cu.userId
+		FROM BoardComment bc
+				 LEFT JOIN CommunityUser cu
+						   ON bc.userId = cu.userId
+							   and bc.communityId = cu.communityId
+		WHERE bc.boardId =  #{boardId}
+		order by createdAt desc
 	</select>
 </mapper>

@@ -3,15 +3,12 @@ package com.kaist.service;
 import java.util.HashMap;
 import java.util.List;
 
+import com.kaist.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.kaist.entity.Board;
-import com.kaist.entity.Community;
-import com.kaist.entity.Role;
-import com.kaist.entity.User;
 import com.kaist.mapper.KaistMapper;
 import com.kaist.repository.BoardCommentRepository;
 import com.kaist.repository.BoardRepository;
@@ -55,14 +52,23 @@ public class BoardService {
 		//저장
 		return boardRepo.save(board);
 	}
-	
-	
+
+
 	public List<HashMap> list(Community community) {
-		
+
 		HashMap param = new HashMap();
 		param.put("communityId", community.getId());
-		
+
 		return mapper.findByCommunityBoard(param);
+	}
+
+
+	public List<HashMap> list(BoardComment comment) {
+
+		HashMap param = new HashMap();
+		param.put("boardId", comment.getBoardId());
+
+		return mapper.findByBoardComment(param);
 	}
 	
 	public Board delete(Board board, Authentication auth) {
