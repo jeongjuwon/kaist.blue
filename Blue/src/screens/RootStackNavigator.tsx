@@ -5,9 +5,11 @@ import { StyleSheet, View } from 'react-native';
 import { DotIndicator } from 'react-native-indicators';
 import { useRecoilState } from 'recoil';
 
+import { Article } from '../atoms/articleState';
 import userTokenState from '../atoms/userTokenState';
 import SignInScreen from './auth/SignInScreen';
 import SignUpScreen from './auth/SignUpScreen';
+import ArticleViewScreen from './club/ArticleViewScreen';
 import ArticleWriteScreen from './club/ArticleWriteScreen';
 import ClubHomeScreen from './club/ClubHomeScreen';
 import ClubListScreen from './club/ClubListScreen';
@@ -25,7 +27,9 @@ export type RootStackParamList = {
   };
   ArticleWrite: {
     clubId: number;
+    articleId: number;
   };
+  ArticleView: Article;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -68,6 +72,7 @@ const RootStackNavigator = () => {
         <>
           <Stack.Screen name="ClubList" component={ClubListScreen} />
           <Stack.Screen name="ArticleWrite" component={ArticleWriteScreen} />
+          <Stack.Screen name="ArticleView" component={ArticleViewScreen} />
           <Stack.Screen name="CreateProfile" component={CreateProfileScreen} />
           <Stack.Screen name="ClubHome" component={ClubHomeScreen} />
         </>
