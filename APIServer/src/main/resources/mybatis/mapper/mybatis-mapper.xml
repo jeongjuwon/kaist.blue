@@ -14,7 +14,9 @@
 		,c.summary
 		,c.title 
 		,cu.userId as userId 
-		,cu.sortNo 
+		,cu.sortNo
+	    ,cu.image profileImage
+		,cu.type profileImageType
 		,c.image
 		,c.type
 	FROM Community c 
@@ -32,6 +34,8 @@
 		 ,b.createdAt
 		 ,cu.nickName
 		 ,cu.userId
+		 ,cu.image AS profileImage
+		 ,cu.type AS profileType
 	FROM Board b
 			 LEFT JOIN CommunityUser cu
 					   ON b.userId = cu.userId
@@ -49,6 +53,8 @@
 			 ,bc.createdAt
 			 ,cu.nickName
 			 ,cu.userId
+		     ,cu.image AS profileImage
+		     ,cu.type AS profileType
 		FROM BoardComment bc
 				 LEFT JOIN CommunityUser cu
 						   ON bc.userId = cu.userId
