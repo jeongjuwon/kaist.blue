@@ -17,6 +17,7 @@
 		,cu.sortNo
 	    ,cu.image profileImage
 		,cu.type profileImageType
+	    ,cu.nickName
 		,c.image
 		,c.type
 	FROM Community c 
