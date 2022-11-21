@@ -147,12 +147,7 @@ const ArticleViewScreen: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <>
-      <ViewArticleHeader
-        articleId={0}
-        clubId={clubId}
-        onSave={onSave}
-        onDelete={onDelete}
-      />
+      <ViewArticleHeader onDelete={onDelete} />
       <ScreenContainer style={{backgroundColor: '#fff'}}>
         <FlatList
           ListHeaderComponent={

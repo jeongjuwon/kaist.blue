@@ -1,5 +1,5 @@
 import React from 'react';
-import { GestureResponderEvent, StyleSheet, ViewStyle } from 'react-native';
+import {GestureResponderEvent, StyleSheet, ViewStyle} from 'react-native';
 
 import BaseButton from './BaseButton';
 
@@ -24,11 +24,10 @@ const GrayButton: React.FC<Props> = ({title, style, onPress, disabled}) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: 'lightblue',
+    backgroundColor: '#ccc',
     borderWidth: 0,
   },
   text: {
-    color: '#ccc',
     fontWeight: '700',
     fontSize: 20,
   },
