@@ -1,14 +1,15 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
-import { useState } from 'react';
-import { useCallback } from 'react';
-import { useEffect } from 'react';
-import { ScrollView } from 'react-native';
-import { useRecoilValue } from 'recoil';
+import {useState} from 'react';
+import {useCallback} from 'react';
+import {useEffect} from 'react';
+import {ScrollView} from 'react-native';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
+import clubState from '../../atoms/clubState';
 
 import userTokenState from '../../atoms/userTokenState';
 import ScreenContainer from '../../components/layout/ScreenContainer';
-import { RootStackParamList } from '../RootStackNavigator';
+import {RootStackParamList} from '../RootStackNavigator';
 import ClubListItem from './components/ClubListItem';
 
 type Data = {
@@ -34,6 +35,7 @@ type JoinedClubData = {
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ClubList'>;
 const ClubListScreen: React.FC<Props> = ({navigation}) => {
+  const setClubStateValue = useSetRecoilState(clubState);
   const [clubList, setClubList] = useState<Data[]>([]);
   const userTokenStateValue = useRecoilValue(userTokenState);
 
@@ -83,6 +85,7 @@ const ClubListScreen: React.FC<Props> = ({navigation}) => {
           navigation.navigate('ClubHome', {
             clubId,
           });
+          setClubStateValue(club);
         } else {
           // 아니라면
           navigation.navigate('CreateProfile', {

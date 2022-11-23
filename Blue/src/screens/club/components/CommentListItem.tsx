@@ -1,11 +1,21 @@
-import React, { useCallback } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import React, {useCallback} from 'react';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {useSetRecoilState} from 'recoil';
+import commentState, {Comment} from '../../../atoms/commentState';
 
 import PublicText from '../../../components/common/PublicText';
 import ProfileImage from './ProfileImage';
 
-const CommentListItem = ({item}) => {
-  const onEdit = useCallback(() => {}, [item]);
+type Props = {
+  comment: Comment;
+};
+
+const CommentListItem: React.FC<Props> = ({comment}) => {
+  const setCommentState = useSetRecoilState(commentState);
+  const onEdit = useCallback(() => {
+    // 상태에 기록을.. 선택된 코멘트를..
+    setCommentState(comment);
+  }, [comment]);
 
   return (
     <View style={listItemStyles.container}>
@@ -14,10 +24,10 @@ const CommentListItem = ({item}) => {
       </View>
       <View style={listItemStyles.contentContainer}>
         <PublicText style={listItemStyles.profileName}>
-          {item.profileName}
+          {comment.nickName}
         </PublicText>
         <PublicText style={listItemStyles.content}>
-          {item.content || '내용이 없습니다.'}
+          {comment.content.trim() || '내용이 없습니다.'}
         </PublicText>
       </View>
       <TouchableOpacity style={listItemStyles.btn} onPress={onEdit}>
@@ -52,7 +62,10 @@ const listItemStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  profileName: {},
+  btnText: {},
+  profileName: {
+    marginBottom: 10,
+  },
 });
 
 export default CommentListItem;
