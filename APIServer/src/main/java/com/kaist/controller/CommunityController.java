@@ -87,6 +87,20 @@ public class CommunityController {
 		
 		return new ResponseEntity<>(message, headers, HttpStatus.OK);
 	}
+
+	@PostMapping("/user/delete")
+	public ResponseEntity<Message> userDelete(@RequestBody CommunityUser cu, Authentication auth){
+
+		List<HashMap> result = communityUserService.userDelete(cu, auth);
+		Message message = new Message();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+		message.setStatus(StatusEnum.OK);
+		message.setMessage(null == result ? "오류가 발생하였습1니다." : "정상적으로 처리되었습니다.");
+		message.setData(null == result ? new ArrayList():result);
+
+		return new ResponseEntity<>(message, headers, HttpStatus.OK);
+	}
 	
 	
 	@PostMapping("/list/user")

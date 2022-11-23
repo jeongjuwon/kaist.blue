@@ -7,4 +7,6 @@ import com.kaist.entity.CommunityUser;
 public interface CommunityUserRepository extends JpaRepository<CommunityUser, Long>{
 
 	boolean existsByCommunityIdAndUserId(Long cid, Long uid);
+
+	CommunityUser findByUserIdAndCommunityId(Long id, Long cid);
 }
