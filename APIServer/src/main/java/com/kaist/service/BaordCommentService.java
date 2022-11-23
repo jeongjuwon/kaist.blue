@@ -2,6 +2,7 @@ package com.kaist.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -38,13 +39,27 @@ public class BaordCommentService {
 		String userid = userDetails.getUsername();
 		User user = userRepo.findByUserId(userid);
 		param.setUserId(user.getId());
-		BoardComment saveBoard = boardCommentRepo.save(param);
-		
 		HashMap hParam = new HashMap();
-		hParam.put("boardId", saveBoard.getBoardId());
+		if(param.getId()!=null){
+			Optional<BoardComment> bco = boardCommentRepo.findById(param.getId());
+
+			if(bco.isPresent()){
+				BoardComment bc = bco.get();
+				if(bc.getUserId().equals(user.getId())){
+					if(param.getContent() != null )bc.setContent(param.getContent());
+					BoardComment saveBoard = boardCommentRepo.save(bc);
+					hParam.put("boardId", saveBoard.getBoardId());
+				}else{
+					return null;
+				}
+			}else{
+				return null;
+			}
+		}else{
+			BoardComment saveBoard = boardCommentRepo.save(param);
+			hParam.put("boardId", saveBoard.getBoardId());
+		}
 		List<HashMap> result = mapper.findByBoardComment(hParam);
-		
-		
 		return result;
 	}
 	

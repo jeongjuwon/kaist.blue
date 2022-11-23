@@ -355,6 +355,35 @@
 			"response": []
 		},
 		{
+			"name": "커뮤니티 게시글 댓글 수정",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"content\":\"댓글 수정 테스트\",\n    \"id\":\"20\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8091/board/comment/save"
+			},
+			"response": []
+		},
+		{
 			"name": "커뮤니티 게시글 댓글 삭제",
 			"protocolProfileBehavior": {
 				"disabledSystemHeaders": {
