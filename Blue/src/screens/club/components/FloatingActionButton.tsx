@@ -1,21 +1,21 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useCallback } from 'react';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/native';
+import React, {useCallback} from 'react';
+import {Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const ICON = require('../../../assets/images/icon-writing.png');
 
 type Props = {
-  clubId: number;
+  communityId: number;
 };
 
-const FloatingActionButtton: React.FC<Props> = ({clubId}) => {
+const FloatingActionButtton: React.FC<Props> = ({communityId}) => {
   const inset = useSafeAreaInsets();
   const navigation = useNavigation();
 
   const onPress = useCallback(() => {
     navigation.navigate('ArticleWrite', {
-      clubId,
+      communityId,
     });
   }, [navigation]);
 

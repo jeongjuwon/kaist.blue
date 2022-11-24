@@ -15,8 +15,8 @@ import ProfileImage from './components/ProfileImage';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ClubHome'>;
 const ClubHomeScreen: React.FC<Props> = ({navigation, route}) => {
-  const {clubId} = route.params;
-  const articles = useRecoilValue(articlesState(clubId));
+  const {communityId} = route.params;
+  const articles = useRecoilValue(articlesState(communityId));
   const clubStateValue = useRecoilValue(clubState);
 
   const onView = useCallback(
@@ -35,7 +35,7 @@ const ClubHomeScreen: React.FC<Props> = ({navigation, route}) => {
 
   const onProfile = useCallback(() => {
     navigation.navigate('CreateProfile', {
-      clubId,
+      communityId,
     });
   }, []);
 
@@ -79,7 +79,7 @@ const ClubHomeScreen: React.FC<Props> = ({navigation, route}) => {
           }}
           style={styles.container}
         />
-        <FloatingActionButtton clubId={clubId} />
+        <FloatingActionButtton communityId={communityId} />
       </ScreenContainer>
     </>
   );

@@ -1,14 +1,15 @@
-import { selectorFamily } from 'recoil';
+import {API_URL} from '@env';
+import {selectorFamily} from 'recoil';
 
-import { Article } from './articleState';
+import {Article} from './articleState';
 import userTokenState from './userTokenState';
 
 const articlesState = selectorFamily({
   key: 'articlesState',
   get:
-    clubId =>
+    communityId =>
     async ({get}) => {
-      const response = await fetch('http://localhost:8091/board/list', {
+      const response = await fetch(`${API_URL}/board/list`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -16,7 +17,7 @@ const articlesState = selectorFamily({
           Authorization: `Bearer ${get(userTokenState)}`,
         },
         body: JSON.stringify({
-          id: clubId,
+          id: communityId,
         }),
       });
       const responseData = await response.json();

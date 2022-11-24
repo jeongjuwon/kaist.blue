@@ -1,7 +1,8 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useCallback, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
-import { useRecoilRefresher_UNSTABLE, useRecoilState } from 'recoil';
+import {API_URL} from '@env';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React, {useCallback, useEffect, useState} from 'react';
+import {KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
+import {useRecoilRefresher_UNSTABLE, useRecoilState} from 'recoil';
 
 import articlesState from '../../atoms/articlesState';
 import userTokenState from '../../atoms/userTokenState';
@@ -9,13 +10,15 @@ import CancelButton from '../../components/buttons/CancelButton';
 import LightBlueButton from '../../components/buttons/LightBlueButton';
 import ScreenContainer from '../../components/layout/ScreenContainer';
 import CustomTextInput from '../auth/components/CustomTextInput';
-import { RootStackParamList } from '../RootStackNavigator';
+import {RootStackParamList} from '../RootStackNavigator';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ArticleWrite'>;
 const ArticleWriteScreen: React.FC<Props> = ({navigation, route}) => {
-  const {clubId, articleId} = route.params;
+  const {communityId, boardId} = route.params;
   const [tokenStateValue, setTokenState] = useRecoilState(userTokenState);
-  const refreshArticles = useRecoilRefresher_UNSTABLE(articlesState(clubId));
+  const refreshArticles = useRecoilRefresher_UNSTABLE(
+    articlesState(communityId),
+  );
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -27,7 +30,7 @@ const ArticleWriteScreen: React.FC<Props> = ({navigation, route}) => {
 
   const onSave = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:8091/board/save', {
+      const response = await fetch(`${API_URL}/board/save`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -37,7 +40,7 @@ const ArticleWriteScreen: React.FC<Props> = ({navigation, route}) => {
         body: JSON.stringify({
           title,
           content,
-          communityId: clubId,
+          communityId,
         }),
       });
       const responseData = await response.json();
@@ -47,7 +50,7 @@ const ArticleWriteScreen: React.FC<Props> = ({navigation, route}) => {
     } catch (e) {
       console.log(e);
     }
-  }, [clubId, content, navigation, title, tokenStateValue]);
+  }, [communityId, content, navigation, title, tokenStateValue]);
 
   const onCancel = useCallback(() => {
     navigation.goBack();

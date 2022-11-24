@@ -1,12 +1,13 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useCallback, useState } from 'react';
-import { useMemo } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import {API_URL} from '@env';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React, {useCallback, useState} from 'react';
+import {useMemo} from 'react';
+import {KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
 
 import CancelButton from '../../components/buttons/CancelButton';
 import LightBlueButton from '../../components/buttons/LightBlueButton';
 import ScreenContainer from '../../components/layout/ScreenContainer';
-import { RootStackParamList } from '../RootStackNavigator';
+import {RootStackParamList} from '../RootStackNavigator';
 import CustomTextInput from './components/CustomTextInput';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
@@ -49,7 +50,7 @@ const SignUpScreen: React.FC<Props> = ({navigation}) => {
   const onSignUp = useCallback(async () => {
     // todo: 네트워킹
     try {
-      const response = await fetch('http://localhost:8091/api/signup', {
+      const response = await fetch(`${API_URL}/api/signup`, {
         method: 'POST',
         headers: {
           Accepts: 'application/json',

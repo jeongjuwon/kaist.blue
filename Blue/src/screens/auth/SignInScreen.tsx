@@ -1,16 +1,24 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useCallback, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { useRecoilState } from 'recoil';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {useRecoilState} from 'recoil';
 
 import userTokenState from '../../atoms/userTokenState';
 import LightBlueButton from '../../components/buttons/LightBlueButton';
 import PublicText from '../../components/common/PublicText';
 import Logo from '../../components/layout/Logo';
 import ScreenContainer from '../../components/layout/ScreenContainer';
-import { RootStackParamList } from '../RootStackNavigator';
+import {RootStackParamList} from '../RootStackNavigator';
 import CustomTextInput from './components/CustomTextInput';
+import RNBootSplash from 'react-native-bootsplash';
+import {API_URL} from '@env';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 const SignInScreen: React.FC<Props> = ({navigation}) => {
@@ -20,9 +28,13 @@ const SignInScreen: React.FC<Props> = ({navigation}) => {
     useRecoilState(userTokenState);
   // const navigation = useNavigation();
 
+  useEffect(() => {
+    RNBootSplash.hide();
+  }, []);
+
   const onSignIn = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:8091/auth/authenticate', {
+      const response = await fetch(`${API_URL}/auth/authenticate`, {
         method: 'POST',
         headers: {
           //   Accepts: 'application/json',

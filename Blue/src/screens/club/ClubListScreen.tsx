@@ -5,6 +5,9 @@ import {useCallback} from 'react';
 import {useEffect} from 'react';
 import {ScrollView} from 'react-native';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
+import RNBootSplash from 'react-native-bootsplash';
+import {API_URL} from '@env';
+
 import clubState from '../../atoms/clubState';
 
 import userTokenState from '../../atoms/userTokenState';
@@ -41,8 +44,9 @@ const ClubListScreen: React.FC<Props> = ({navigation}) => {
 
   useEffect(() => {
     async function init() {
+      console.log('API_URL', API_URL);
       try {
-        const response = await fetch('http://localhost:8091/community/list', {
+        const response = await fetch(`${API_URL}/community/list`, {
           method: 'GET',
           headers: {
             Accepts: 'application/json',
@@ -51,6 +55,9 @@ const ClubListScreen: React.FC<Props> = ({navigation}) => {
         });
         const responseData = await response.json();
         setClubList(responseData.data);
+        RNBootSplash.hide({
+          fade: true,
+        });
       } catch (error) {
         console.error(error);
       }
@@ -60,36 +67,33 @@ const ClubListScreen: React.FC<Props> = ({navigation}) => {
   }, []);
 
   const onPressClub = useCallback(
-    (clubId: number) => async () => {
+    (communityId: number) => async () => {
       try {
-        const response = await fetch(
-          'http://localhost:8091/community/list/user',
-          {
-            method: 'POST',
-            headers: {
-              Accepts: 'application/json',
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${userTokenStateValue}`,
-            },
+        const response = await fetch(`${API_URL}/community/list/user`, {
+          method: 'POST',
+          headers: {
+            Accepts: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userTokenStateValue}`,
           },
-        );
+        });
         const responseData = await response.json();
 
         const club = responseData.data.find((row: JoinedClubData) => {
-          return !!row.userId && row.communityId === clubId;
+          return !!row.userId && row.communityId === communityId;
         });
         console.log('club', club);
         // 해당 클럽에 가입되어있는지 여부를 여기서 체크
         if (club) {
           // 만약 가입되어있으면
           navigation.navigate('ClubHome', {
-            clubId,
+            communityId,
           });
           setClubStateValue(club);
         } else {
           // 아니라면
           navigation.navigate('CreateProfile', {
-            clubId,
+            communityId,
           });
         }
       } catch (e) {

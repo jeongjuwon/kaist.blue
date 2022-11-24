@@ -7,13 +7,13 @@ import PublicText from '../../../components/common/PublicText';
 import CustomTextInput from '../../auth/components/CustomTextInput';
 
 type Props = {
-  articleId: number;
+  onCommentEdit: (commentId: number, content: string) => void;
   onCommentSave: (content: string) => void;
   onCommentDelete: (comment: Comment) => void;
 };
 
 const WriteCommentInput: React.FC<Props> = ({
-  articleId,
+  onCommentEdit,
   onCommentSave,
   onCommentDelete,
 }) => {
@@ -54,6 +54,20 @@ const WriteCommentInput: React.FC<Props> = ({
     setContent('');
   }, []);
 
+  const _onCommentEdit = useCallback(() => {
+    if (!commentStateValue?.id) {
+      return;
+    }
+
+    onCommentEdit(commentStateValue?.id, content);
+    setContent('');
+  }, [commentStateValue?.id, content]);
+
+  const _onCommentSave = useCallback(() => {
+    onCommentSave(content);
+    setContent('');
+  }, [content]);
+
   return (
     <View style={styles.container}>
       <CustomTextInput
@@ -65,10 +79,7 @@ const WriteCommentInput: React.FC<Props> = ({
       {commentStateValue === null && (
         <TouchableOpacity
           style={styles.btn}
-          onPress={() => {
-            onCommentSave(content);
-            setContent('');
-          }}
+          onPress={_onCommentSave}
           disabled={isDisabled}>
           <PublicText
             style={[
@@ -83,10 +94,7 @@ const WriteCommentInput: React.FC<Props> = ({
         <View style={styles.editBtnContainer}>
           <TouchableOpacity
             style={styles.btn}
-            onPress={() => {
-              onCommentSave(content);
-              setContent('');
-            }}
+            onPress={_onCommentEdit}
             disabled={isDisabled}>
             <PublicText
               style={[

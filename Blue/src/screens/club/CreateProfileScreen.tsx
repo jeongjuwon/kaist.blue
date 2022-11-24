@@ -20,10 +20,11 @@ import ProfileImage from './components/ProfileImage';
 import clubState from '../../atoms/clubState';
 import CancelButton from '../../components/buttons/CancelButton';
 import GrayButton from '../../components/buttons/GrayButton';
+import {API_URL} from '@env';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'CreateProfile'>;
 const CreateProfileScreen: React.FC<Props> = ({navigation, route}) => {
-  const {clubId} = route.params;
+  const {communityId} = route.params;
   const userTokenStateValue = useRecoilValue(userTokenState);
   const clubStateValue = useRecoilValue(clubState);
   const [nickName, setNickName] = useState(clubStateValue?.nickName || '');
@@ -38,33 +39,30 @@ const CreateProfileScreen: React.FC<Props> = ({navigation, route}) => {
       // todo: networking
 
       try {
-        const response = await fetch(
-          'http://localhost:8091/community/user/add',
-          {
-            method: 'POST',
-            headers: {
-              Accepts: 'application/json',
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${userTokenStateValue}`,
-            },
-            body: JSON.stringify({
-              communityId: clubId,
-              nickName: nickName,
-              sortNo: '0',
-              imageStr: profileImage,
-            }),
+        const response = await fetch(`${API_URL}/community/user/add`, {
+          method: 'POST',
+          headers: {
+            Accepts: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userTokenStateValue}`,
           },
-        );
+          body: JSON.stringify({
+            communityId,
+            nickName: nickName,
+            sortNo: '0',
+            imageStr: profileImage,
+          }),
+        });
         const responseData = await response.json();
         // console.log('responseData', responseData);
         navigation.replace('ClubHome', {
-          clubId,
+          communityId,
         });
       } catch (e) {
         console.log(e);
       }
     },
-    [clubId, nickName, profileImage],
+    [communityId, nickName, profileImage],
   );
 
   const onEdit = useCallback(() => {

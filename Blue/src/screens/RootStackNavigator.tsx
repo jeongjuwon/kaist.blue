@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { DotIndicator } from 'react-native-indicators';
-import { useRecoilState } from 'recoil';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {DotIndicator} from 'react-native-indicators';
+import {useRecoilState} from 'recoil';
 
-import { Article } from '../atoms/articleState';
+import {Article} from '../atoms/articleState';
 import userTokenState from '../atoms/userTokenState';
 import SignInScreen from './auth/SignInScreen';
 import SignUpScreen from './auth/SignUpScreen';
@@ -20,14 +20,14 @@ export type RootStackParamList = {
   SignUp: undefined;
   ClubList: undefined;
   CreateProfile: {
-    clubId: number;
+    communityId: number;
   };
   ClubHome: {
-    clubId: number;
+    communityId: number;
   };
   ArticleWrite: {
-    clubId: number;
-    articleId: number;
+    communityId: number;
+    boardId: number;
   };
   ArticleView: Article;
 };
