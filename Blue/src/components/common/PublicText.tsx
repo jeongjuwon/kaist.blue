@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { StyleProp, StyleSheet, Text, TextStyle } from 'react-native';
+import React, {ReactNode} from 'react';
+import {StyleProp, StyleSheet, Text, TextStyle} from 'react-native';
 
 type Props = {
   style?: StyleProp<TextStyle>;
@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Nanum GoDigANiGoGoDing',
     fontSize: 20,
+    color: '#000',
   },
 });
 

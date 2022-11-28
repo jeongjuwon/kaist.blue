@@ -2,8 +2,8 @@
 // customTextInput > camelCase
 // custom_text_input > snake_case
 // custom-text-input > kebab-case
-import React, { useState } from 'react';
-import { StyleSheet, TextInput, ViewStyle } from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, TextInput, ViewStyle} from 'react-native';
 
 type Props = {
   value?: string;
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     height: 50,
     paddingHorizontal: 20,
     borderRadius: 30,
+    color: '#000',
   },
 });
 
