@@ -30,11 +30,23 @@ code Blue
 
 ```
 cd Blue
-npm install <= 처음 다운로드 받거나 package.json에 변경 사항이 있을 때
-npx pod-install <= 처음 다운로드 받거나 package.json에 변경 사항이 있을 때
-npm start
-npx react-native run-ios
-npx react-native run-android
+
+# npm 설치: 처음 다운로드 받거나 package.json에 변경 사항이 있을 때
+
+npm install 
+
+# pod 설치: 처음 다운로드 받거나 package.json에 변경 사항이 있을 때
+
+npx pod-install
+
+# 메트로 번들러 실행
+npm run start:dev 
+
+# ios 실행
+yarn ios 
+
+# aos 실행
+yarn android
 ```
 
 # 서버 관리
