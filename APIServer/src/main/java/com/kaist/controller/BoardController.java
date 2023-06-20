@@ -44,7 +44,7 @@ public class BoardController {
 		Message message = new Message();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		message.setStatus(HttpStatus.OK);
+		message.setStatus(StatusEnum.OK);
 		
 		message.setMessage(null == result ? "error" : "ok");
 		message.setData(null == result ? new ArrayList():result);
@@ -61,7 +61,7 @@ public class BoardController {
 		Message message = new Message();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		message.setStatus(HttpStatus.OK);
+		message.setStatus(StatusEnum.OK);
 		
 		message.setMessage(null == result ? "error" : "ok");
 		message.setData(null == result ? new ArrayList():result);
@@ -79,7 +79,7 @@ public class BoardController {
 		Message message = new Message();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		message.setStatus(HttpStatus.OK);
+		message.setStatus(StatusEnum.OK);
 		
 		message.setMessage(null == result ? "ok" : "error");
 		message.setData(null == result ? new ArrayList():result);
@@ -96,7 +96,7 @@ public class BoardController {
 		Message message = new Message();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		message.setStatus(HttpStatus.OK);
+		message.setStatus(StatusEnum.OK);
 
 		message.setMessage(null == result ? "error" : "ok");
 		message.setData(null == result ? new ArrayList():result);
@@ -114,7 +114,7 @@ public class BoardController {
 		Message message = new Message();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		message.setStatus(HttpStatus.OK);
+		message.setStatus(StatusEnum.OK);
 		
 		message.setMessage(null == result ? "error" : "ok");
 		message.setData(null == result ? new ArrayList():result);
@@ -131,7 +131,7 @@ public class BoardController {
 		Message message = new Message();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		message.setStatus(HttpStatus.OK);
+		message.setStatus(StatusEnum.OK);
 		
 		message.setMessage(null == result ? "error" : "ok");
 		message.setData(null == result ? new ArrayList():result);
