@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kaist.dto.Message;
-import com.kaist.dto.StatusEnum;
 import com.kaist.entity.Community;
 import com.kaist.entity.CommunityUser;
 import com.kaist.mapper.KaistMapper;
@@ -50,7 +49,7 @@ public class CommunityController {
 		Message message = new Message();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		message.setStatus(StatusEnum.OK);
+		message.setStatus(HttpStatus.OK);
 		message.setMessage("정상적으로 처리되었습니다.");
 		message.setData(result);
 		
@@ -65,7 +64,7 @@ public class CommunityController {
 		Message message = new Message();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		message.setStatus(StatusEnum.OK);
+		message.setStatus(HttpStatus.OK);
 		message.setMessage("정상적으로 처리되었습니다.");
 		message.setData(result);
 		
@@ -75,17 +74,16 @@ public class CommunityController {
 	
 	@PostMapping("/user/add")
 	public ResponseEntity<Message> userAdd(@RequestBody CommunityUser cu, Authentication auth){
-		
-		CommunityUser result = communityUserService.userAdd(cu, auth);
-		Message message = new Message();
+		Message message = communityUserService.userAdd(cu, auth);
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		message.setStatus(StatusEnum.OK);
-		message.setMessage(null == result ? "중복 가입 불가" : "정상적으로 처리되었습니다.");
-		message.setData(null == result ? new ArrayList():result);
-		
-		
-		return new ResponseEntity<>(message, headers, HttpStatus.OK);
+		return new ResponseEntity<>(message, headers, message.getStatus());
+	}
+
+	@PostMapping("/user/edit")
+	public ResponseEntity<Message> userEdit(@RequestBody CommunityUser cu, Authentication auth){
+		Message message = communityUserService.userEdit(cu, auth);
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<>(message, headers, message.getStatus());
 	}
 
 	@PostMapping("/user/delete")
@@ -94,8 +92,7 @@ public class CommunityController {
 		List<HashMap> result = communityUserService.userDelete(cu, auth);
 		Message message = new Message();
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		message.setStatus(StatusEnum.OK);
+		message.setStatus(HttpStatus.OK);
 		message.setMessage(null == result ? "오류가 발생하였습1니다." : "정상적으로 처리되었습니다.");
 		message.setData(null == result ? new ArrayList():result);
 
@@ -111,7 +108,7 @@ public class CommunityController {
 		Message message = new Message();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		message.setStatus(StatusEnum.OK);
+		message.setStatus(HttpStatus.OK);
 		message.setMessage(null == result ? "error" : "ok");
 		message.setData(null == result ? new ArrayList():result);
 		
@@ -128,7 +125,7 @@ public class CommunityController {
 		Message message = new Message();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		message.setStatus(StatusEnum.OK);
+		message.setStatus(HttpStatus.OK);
 		message.setMessage(null == result ? "error" : "ok");
 		message.setData(null == result ? new ArrayList():result);
 		
