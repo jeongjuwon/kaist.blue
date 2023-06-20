@@ -11,6 +11,7 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import lombok.Builder;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -54,8 +55,4 @@ public class CommunityUser {
 	
 	@Column(name = "type")
 	private String type;
-	
-	
-	
-	
 }

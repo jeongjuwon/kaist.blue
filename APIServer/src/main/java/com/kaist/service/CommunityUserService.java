@@ -4,8 +4,12 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
+import com.kaist.dto.CommunityUserDTO;
+import com.kaist.dto.Message;
+import com.kaist.dto.UserDTO;
 import com.kaist.mapper.KaistMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -28,30 +32,77 @@ public class CommunityUserService {
 	@Autowired
 	KaistMapper mapper;
 	
-	public CommunityUser userAdd(CommunityUser cu, Authentication auth) {
+	public Message userAdd(CommunityUser cu, Authentication auth) {
 
 		//인증된 사용자 정보를 찾기
-
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 		String userName = userDetails.getUsername();
 		User user = userRepo.findByUserId(userName);
 		cu.setUserId(user.getId());
 
-			if (communityUserRepo.existsByCommunityIdAndUserId(cu.getCommunityId(), cu.getUserId())) {
-					CommunityUser checkCu = communityUserRepo.findByUserIdAndCommunityId(user.getId(), cu.getCommunityId());
-					if (null != checkCu) {
-						if(cu.getNickName() != null) checkCu.setNickName(cu.getNickName());
-						if(cu.getImage() != null) checkCu.setImage(cu.getImage());
-						if(cu.getType() != null) checkCu.setType(cu.getType());
-						if(cu.getSortNo() != null) checkCu.setSortNo(cu.getSortNo());
-						if(cu.getCreatedAt() != null) checkCu.setCreatedAt(cu.getCreatedAt());
-						return communityUserImageSave(checkCu);
-					}else{
-						return null;
-					}
-			} else {
-				return communityUserImageSave(cu);
+		Message rMsg = new Message();
+		rMsg.setStatus(HttpStatus.OK);
+		//커뮤니티 닉네임 검색
+		CommunityUser findUser = communityUserRepo.findByUserIdAndCommunityId(user.getId(), cu.getCommunityId());
+
+		if(null!=findUser){
+			//중복가입
+			rMsg.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+			rMsg.setMessage("중복가입 불가");
+			return rMsg;
+		}
+
+		if(communityUserRepo.existsByNickNameAndCommunityId(cu.getNickName(), cu.getCommunityId())){
+			//닉네임 중복
+			rMsg.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+			rMsg.setMessage("사용중인 닉네임");
+			return rMsg;
+		}else{
+			rMsg.setStatus(HttpStatus.OK);
+			CommunityUser result = communityUserImageSave(cu);
+			rMsg.setMessage(result != null ? "정상처리 되었습니다." : "서버오류");
+			if(null!=result){
+				rMsg.setData(result);
 			}
+			return rMsg;
+		}
+	}
+
+	public Message userEdit(CommunityUser cu, Authentication auth) {
+
+		//인증된 사용자 정보를 찾기
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+		String userName = userDetails.getUsername();
+		User user = userRepo.findByUserId(userName);
+		cu.setUserId(user.getId());
+
+		Message rMsg = new Message();
+		rMsg.setStatus(HttpStatus.OK);
+		CommunityUser findUser = communityUserRepo.findByUserIdAndCommunityId(user.getId(), cu.getCommunityId());
+		if(null == findUser){
+			//닉네임 중복
+			rMsg.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+			rMsg.setMessage("사용자를 찾을 수 없음");
+			return rMsg;
+		}else{
+			rMsg.setStatus(HttpStatus.OK);
+			//수정은 이미지, 또는 닉네임만
+			if(cu.getNickName() != null) findUser.setNickName(cu.getNickName());
+			if(cu.getImageStr() != null) findUser.setImageStr(cu.getImageStr());
+			CommunityUser result = communityUserImageSave(findUser);
+			rMsg.setMessage(result != null ? "정상처리 되었습니다." : "서버오류");
+			if(null!=result){
+				CommunityUserDTO cuDTO = new CommunityUserDTO();
+				cuDTO.setCommunityId(result.getCommunityId());
+				cuDTO.setImage(result.getImageStr());
+				cuDTO.setNickName(result.getNickName());
+				cuDTO.setUserId(result.getUserId());
+				cuDTO.setUserName(user.getUserName());
+				cuDTO.setEmail(user.getEmail());
+				rMsg.setData(cuDTO);
+			}
+			return rMsg;
+		}
 	}
 
 	public List<HashMap> userDelete(CommunityUser cu, Authentication auth) {
